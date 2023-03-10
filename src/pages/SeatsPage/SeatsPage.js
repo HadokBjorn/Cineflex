@@ -1,30 +1,66 @@
 import styled from "styled-components"
+import {useState, useEffect} from "react"
+import { Link, useParams } from "react-router-dom"
+import axios from "axios"
 
 export default function SeatsPage() {
+    const { idSession } = useParams()
+    const [chair, setChair] = useState([])
+    const [movie, setMovie] = useState([])
+    const [day, setDay] = useState([])
+    const [time, setTime] = useState([])
+    const [select, setSelect]= useState([])
+
+    useEffect(() => {
+        const url = `https://mock-api.driven.com.br/api/v8/cineflex/showtimes/${idSession}/seats`
+        axios.get(url)
+        .then((res) => {
+            setDay(res.data.day)
+            setMovie(res.data.movie)
+            setChair(res.data.seats)
+            setTime(res.data.name);
+            console.log("resposta",res.data)
+        })
+        .catch((err) => console.error(err))
+    }, [idSession])
+
+    function selectSeats(item){
+        if(!select.includes(item)){
+            const seats = [...select, item]
+            setSelect(seats)
+        }else{
+            const seats = [...select].filter(el => el !== item)
+            setSelect(seats);
+        }
+    }
 
     return (
         <PageContainer>
             Selecione o(s) assento(s)
 
             <SeatsContainer>
-                <SeatItem>01</SeatItem>
-                <SeatItem>02</SeatItem>
-                <SeatItem>03</SeatItem>
-                <SeatItem>04</SeatItem>
-                <SeatItem>05</SeatItem>
+                {chair.map((c)=>(
+                    <SeatItem
+                    onClick={()=> selectSeats(c.name)}
+                    key={c.id}
+                    className={select.includes(c.name)?"selecionado":(c.isAvailable===true?"disponivel":"indisponivel")}
+                    >
+                        {c.name}
+                    </SeatItem>
+                ))}
             </SeatsContainer>
 
             <CaptionContainer>
                 <CaptionItem>
-                    <CaptionCircle />
+                    <CaptionCircle className="selecionado"/>
                     Selecionado
                 </CaptionItem>
                 <CaptionItem>
-                    <CaptionCircle />
+                    <CaptionCircle className="disponivel"/>
                     Disponível
                 </CaptionItem>
                 <CaptionItem>
-                    <CaptionCircle />
+                    <CaptionCircle className="indisponivel"/>
                     Indisponível
                 </CaptionItem>
             </CaptionContainer>
@@ -35,17 +71,18 @@ export default function SeatsPage() {
 
                 CPF do Comprador:
                 <input placeholder="Digite seu CPF..." />
-
-                <button>Reservar Assento(s)</button>
+                <Link to={"/buy-ticket"}>
+                    <button>Reservar Assento(s)</button>
+                </Link>
             </FormContainer>
 
             <FooterContainer>
                 <div>
-                    <img src={"https://br.web.img2.acsta.net/pictures/22/05/16/17/59/5165498.jpg"} alt="poster" />
+                    <img src={movie.posterURL} alt="poster" />
                 </div>
                 <div>
-                    <p>Tudo em todo lugar ao mesmo tempo</p>
-                    <p>Sexta - 14h00</p>
+                    <p>{movie.title}</p>
+                    <p>{day.weekday} - {time}</p>
                 </div>
             </FooterContainer>
 
@@ -64,6 +101,19 @@ const PageContainer = styled.div`
     margin-top: 30px;
     padding-bottom: 120px;
     padding-top: 70px;
+
+    .selecionado{
+        background: #1AAE9E;
+        border: 1px solid #0E7D71;
+    }
+    .dispovivel{
+        background: #C3CFD9;
+        border: 1px solid #7B8B99;
+    }
+    .indisponivel{
+        background: #FBE192;
+        border: 1px solid #F7C52B;
+    }
 `
 const SeatsContainer = styled.div`
     width: 330px;
@@ -82,6 +132,10 @@ const FormContainer = styled.div`
     margin: 20px 0;
     font-size: 18px;
     button {
+        align-self: center;
+    }
+    a{
+        text-decoration: none;
         align-self: center;
     }
     input {
