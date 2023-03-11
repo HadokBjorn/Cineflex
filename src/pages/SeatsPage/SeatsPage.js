@@ -25,13 +25,19 @@ export default function SeatsPage() {
     }, [idSession])
 
     function selectSeats(item){
-        if(!select.includes(item)){
+        if(!select.includes(item)&& item.isAvailable){
             const seats = [...select, item]
             setSelect(seats)
+        console.log(seats)
+        }else if(!item.isAvailable){
+            alert("Este assento não está disponivel")
         }else{
             const seats = [...select].filter(el => el !== item)
             setSelect(seats);
+        console.log(seats)
+
         }
+
     }
 
     return (
@@ -41,9 +47,10 @@ export default function SeatsPage() {
             <SeatsContainer>
                 {chair.map((c)=>(
                     <SeatItem
-                    onClick={()=> selectSeats(c.name)}
+                    data-test="seat"
+                    onClick={()=> selectSeats(c)}
                     key={c.id}
-                    className={select.includes(c.name)?"selecionado":(c.isAvailable===true?"disponivel":"indisponivel")}
+                    className={select.includes(c)?"selecionado":(c.isAvailable===true?"disponivel":"indisponivel")}
                     >
                         {c.name}
                     </SeatItem>
@@ -67,16 +74,16 @@ export default function SeatsPage() {
 
             <FormContainer>
                 Nome do Comprador:
-                <input placeholder="Digite seu nome..." />
+                <input data-test="client-name" placeholder="Digite seu nome..." />
 
                 CPF do Comprador:
-                <input placeholder="Digite seu CPF..." />
+                <input data-test="client-cpf" placeholder="Digite seu CPF..." />
                 <Link to={"/buy-ticket"}>
-                    <button>Reservar Assento(s)</button>
+                    <button data-test="book-seat-btn">Reservar Assento(s)</button>
                 </Link>
             </FormContainer>
 
-            <FooterContainer>
+            <FooterContainer data-test="footer">
                 <div>
                     <img src={movie.posterURL} alt="poster" />
                 </div>
