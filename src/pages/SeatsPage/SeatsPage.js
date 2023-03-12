@@ -1,15 +1,17 @@
 import styled from "styled-components"
 import {useState, useEffect} from "react"
-import { Link, useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import axios from "axios"
 
-export default function SeatsPage() {
+export default function SeatsPage({setInfo}) {
     const { idSession } = useParams()
+    const navigate = useNavigate()
     const [chair, setChair] = useState([])
     const [movie, setMovie] = useState([])
     const [day, setDay] = useState([])
     const [time, setTime] = useState([])
     const [select, setSelect]= useState([])
+    const [client, setClient] = useState()
 
     useEffect(() => {
         const url = `https://mock-api.driven.com.br/api/v8/cineflex/showtimes/${idSession}/seats`
@@ -35,9 +37,31 @@ export default function SeatsPage() {
             const seats = [...select].filter(el => el !== item)
             setSelect(seats);
         console.log(seats)
-
         }
+    }
+    function reserveSeat(e){
+        e.preventDefault();
+        navigate("/buy-ticket")
+        const objectInfo = {
+            nameFilm: movie.title,
+            date: day.date,
+            time: time,
+            seats:select.map(item => item.name),
+            client,
+        };
+        setInfo(objectInfo);
 
+        console.log(objectInfo)
+    }
+    function clientName(e){
+            setClient({
+                user:e.target.value
+            })
+    }
+
+    function clientDocument(e){
+            console.log(e.target.value)
+            setClient({...client, cpf: e.target.value})
     }
 
     return (
@@ -72,15 +96,13 @@ export default function SeatsPage() {
                 </CaptionItem>
             </CaptionContainer>
 
-            <FormContainer>
+            <FormContainer onSubmit={reserveSeat}>
                 Nome do Comprador:
-                <input data-test="client-name" placeholder="Digite seu nome..." />
+                <input data-test="client-name" onChange={clientName} type="name" required placeholder="Digite seu nome..." />
 
                 CPF do Comprador:
-                <input data-test="client-cpf" placeholder="Digite seu CPF..." />
-                <Link to={"/buy-ticket"}>
-                    <button data-test="book-seat-btn">Reservar Assento(s)</button>
-                </Link>
+                <input data-test="client-cpf" onChange={clientDocument} required placeholder="Digite seu CPF..." pattern="\d{3}\.?\d{3}\.?\d{3}-?\d{2}"/>
+                    <button type="submit" data-test="book-seat-btn">Reservar Assento(s)</button>
             </FormContainer>
 
             <FooterContainer data-test="footer">
@@ -131,7 +153,7 @@ const SeatsContainer = styled.div`
     justify-content: center;
     margin-top: 20px;
 `
-const FormContainer = styled.div`
+const FormContainer = styled.form`
     width: calc(100vw - 40px); 
     display: flex;
     flex-direction: column;
