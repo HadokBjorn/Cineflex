@@ -12,6 +12,7 @@ export default function SeatsPage({setInfo}) {
     const [time, setTime] = useState([])
     const [select, setSelect]= useState([])
     const [client, setClient] = useState()
+    const [post, setPost] = useState(false)
 
     useEffect(() => {
         const url = `https://mock-api.driven.com.br/api/v8/cineflex/showtimes/${idSession}/seats`
@@ -25,6 +26,18 @@ export default function SeatsPage({setInfo}) {
         })
         .catch((err) => console.error(err))
     }, [idSession])
+
+    useEffect(()=>{
+        const url = 'https://mock-api.driven.com.br/api/v8/cineflex/seats/book-many';
+        if(post){
+            axios.post(url, client)
+            .then(res => {
+                navigate("/buy-ticket")
+                console.log("resposta do post",res)})
+            .catch((err)=> console.log(err))
+        }
+        
+    },[post, client, navigate])
 
     function selectSeats(item){
         if(!select.includes(item)&& item.isAvailable){
@@ -40,8 +53,15 @@ export default function SeatsPage({setInfo}) {
         }
     }
     function reserveSeat(e){
+
         e.preventDefault();
-        navigate("/buy-ticket")
+
+        const sendUser = {
+            ids: select.map((el)=>(el.id)),
+            name: client.user,
+            cpf: client.cpf
+        };
+        
         const objectInfo = {
             nameFilm: movie.title,
             date: day.date,
@@ -49,10 +69,13 @@ export default function SeatsPage({setInfo}) {
             seats:select.map(item => item.name),
             client,
         };
+        setClient(sendUser);
         setInfo(objectInfo);
-
-        console.log(objectInfo)
+        setPost(true);
+        
+        console.log(sendUser)
     }
+
     function clientName(e){
             setClient({
                 user:e.target.value
