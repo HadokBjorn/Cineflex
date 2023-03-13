@@ -22,7 +22,6 @@ export default function SeatsPage({setInfo}) {
             setMovie(res.data.movie)
             setChair(res.data.seats)
             setTime(res.data.name);
-            console.log("resposta",res.data)
         })
         .catch((err) => console.error(err))
     }, [idSessao])
@@ -33,7 +32,7 @@ export default function SeatsPage({setInfo}) {
             axios.post(url, client)
             .then(res => {
                 navigate("/sucesso")
-                console.log("resposta do post",res)})
+            })
             .catch((err)=> console.log(err))
         }
         
@@ -43,15 +42,12 @@ export default function SeatsPage({setInfo}) {
         if(!select.includes(item)&& item.isAvailable){
             const seats = [...select, item]
             setSelect(seats)
-        console.log(seats)
         }else if(!item.isAvailable){
             alert("Este assento não está disponivel")
         }else{
             const seats = [...select].filter(el => el !== item)
             setSelect(seats);
-        console.log(seats)
         }
-        console.log(client)
     }
     function reserveSeat(e){
         e.preventDefault();
@@ -72,8 +68,6 @@ export default function SeatsPage({setInfo}) {
         setClient(sendUser);
         setInfo(objectInfo);
         setPost(true);
-        
-        console.log(sendUser)
     }
 
     function handleOnChange(e){
