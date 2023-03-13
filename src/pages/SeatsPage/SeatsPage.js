@@ -11,7 +11,7 @@ export default function SeatsPage({setInfo}) {
     const [day, setDay] = useState([])
     const [time, setTime] = useState([])
     const [select, setSelect]= useState([])
-    const [client, setClient] = useState()
+    const [client, setClient] = useState({})
     const [post, setPost] = useState(false)
 
     useEffect(() => {
@@ -51,9 +51,9 @@ export default function SeatsPage({setInfo}) {
             setSelect(seats);
         console.log(seats)
         }
+        console.log(client)
     }
     function reserveSeat(e){
-
         e.preventDefault();
 
         const sendUser = {
@@ -76,15 +76,8 @@ export default function SeatsPage({setInfo}) {
         console.log(sendUser)
     }
 
-    function clientName(e){
-            setClient({
-                user:e.target.value
-            })
-    }
-
-    function clientDocument(e){
-            console.log(e.target.value)
-            setClient({...client, cpf: e.target.value})
+    function handleOnChange(e){
+        setClient({...client, [e.target.name]:e.target.value})
     }
 
     return (
@@ -120,12 +113,24 @@ export default function SeatsPage({setInfo}) {
             </CaptionContainer>
 
             <FormContainer onSubmit={reserveSeat}>
-                Nome do Comprador:
-                <input data-test="client-name" onChange={clientName} type="name" required placeholder="Digite seu nome..." />
+                {/* {select.map((item,i)=>(
+                    <div key={i}>
+                    Nome do Comprador {item.name}:
+                    <input name={"user"} data-test="client-name" onChange={clientName} type="text" required placeholder="Digite seu nome..." />
+    
+                    CPF do Comprador {item.name}:
+                    <input name={"cpf"} data-test="client-cpf" onChange={clientDocument} type="number" required placeholder="Digite seu CPF..." pattern="\d{3}\.?\d{3}\.?\d{3}-?\d{2}"/>
+                    </div>
+                ))} */}
 
+                Nome do Comprador:
+                <input name="user" data-test="client-name" onChange={handleOnChange} type="text" required placeholder="Digite seu nome..." />
+    
                 CPF do Comprador:
-                <input data-test="client-cpf" onChange={clientDocument} required placeholder="Digite seu CPF..." pattern="\d{3}\.?\d{3}\.?\d{3}-?\d{2}"/>
-                    <button type="submit" data-test="book-seat-btn">Reservar Assento(s)</button>
+                <input name="cpf" data-test="client-cpf" onChange={handleOnChange} type="number" required placeholder="Digite seu CPF..." pattern="\d{3}\.?\d{3}\.?\d{3}-?\d{2}"/>
+                
+                
+                <button type="submit" data-test="book-seat-btn">Reservar Assento(s)</button>
             </FormContainer>
 
             <FooterContainer data-test="footer">
