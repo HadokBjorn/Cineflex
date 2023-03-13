@@ -11,7 +11,9 @@ export default function App() {
     return (
         <>
             <BrowserRouter>
-                <NavContainer>CINEFLEX</NavContainer>
+                <NavContainer>
+                    CINEFLEX
+                </NavContainer>
                 <Routes>
                     <Route path="/" element={<HomePage />} />
                     <Route path="/sessoes/:idFilme" element={<SessionsPage />} />
@@ -39,4 +41,5 @@ const NavContainer = styled.div`
         text-decoration: none;
         color: #E8833A;
     }
+    
 `

@@ -15,7 +15,6 @@ export default function SessionsPage() {
         .then((res)=>{
             setMovie(res.data)
             setSession(res.data.days)
-            console.log(res.data)
         })
         .catch((err)=>console.log(err))
     }, [idFilme])

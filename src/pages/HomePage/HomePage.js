@@ -11,7 +11,6 @@ export default function HomePage() {
         axios.get(url)
         .then((res) => {
             setPoster(res.data)
-            console.log(res.data)
         })
         .catch((err) => console.log(err))
     }, []);
