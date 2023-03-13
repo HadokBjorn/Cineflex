@@ -118,10 +118,10 @@ export default function SeatsPage({setInfo}) {
                 ))} */}
 
                 Nome do Comprador:
-                <input name="user" data-test="client-name" value={""} onChange={handleOnChange} type="text" required placeholder="Digite seu nome..." />
+                <input name="user" data-test="client-name" onChange={handleOnChange} type="text" required placeholder="Digite seu nome..." />
     
                 CPF do Comprador:
-                <input name="cpf" data-test="client-cpf" value={""} onChange={handleOnChange} type="number" required placeholder="Digite seu CPF..." pattern="\d{3}\.?\d{3}\.?\d{3}-?\d{2}"/>
+                <input name="cpf" data-test="client-cpf" onChange={handleOnChange} type="number" required placeholder="Digite seu CPF..." pattern="\d{3}\.?\d{3}\.?\d{3}-?\d{2}"/>
                 
                 
                 <button type="submit" data-test="book-seat-btn">Reservar Assento(s)</button>
