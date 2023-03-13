@@ -4,7 +4,7 @@ import { useNavigate, useParams } from "react-router-dom"
 import axios from "axios"
 
 export default function SeatsPage({setInfo}) {
-    const { idSession } = useParams()
+    const { idSessao } = useParams()
     const navigate = useNavigate()
     const [chair, setChair] = useState([])
     const [movie, setMovie] = useState([])
@@ -15,7 +15,7 @@ export default function SeatsPage({setInfo}) {
     const [post, setPost] = useState(false)
 
     useEffect(() => {
-        const url = `https://mock-api.driven.com.br/api/v8/cineflex/showtimes/${idSession}/seats`
+        const url = `https://mock-api.driven.com.br/api/v8/cineflex/showtimes/${idSessao}/seats`
         axios.get(url)
         .then((res) => {
             setDay(res.data.day)
@@ -25,14 +25,14 @@ export default function SeatsPage({setInfo}) {
             console.log("resposta",res.data)
         })
         .catch((err) => console.error(err))
-    }, [idSession])
+    }, [idSessao])
 
     useEffect(()=>{
         const url = 'https://mock-api.driven.com.br/api/v8/cineflex/seats/book-many';
         if(post){
             axios.post(url, client)
             .then(res => {
-                navigate("/buy-ticket")
+                navigate("/sucesso")
                 console.log("resposta do post",res)})
             .catch((err)=> console.log(err))
         }

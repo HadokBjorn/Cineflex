@@ -14,9 +14,9 @@ export default function App() {
                 <NavContainer>CINEFLEX</NavContainer>
                 <Routes>
                     <Route path="/" element={<HomePage />} />
-                    <Route path="/movies/:idFilm" element={<SessionsPage />} />
-                    <Route path="/chairs/:idSession" element={<SeatsPage setInfo={setInfo}/> } />
-                    <Route path="/buy-ticket" element={<SuccessPage info={info}/>} />
+                    <Route path="/sessoes/:idFilme" element={<SessionsPage />} />
+                    <Route path="/assentos/:idSessao" element={<SeatsPage setInfo={setInfo}/> } />
+                    <Route path="/sucesso" element={<SuccessPage info={info}/>} />
                 </Routes>
             </BrowserRouter>
         </>

@@ -5,12 +5,12 @@ import { Link, useParams } from "react-router-dom";
 
 export default function SessionsPage() {
 
-    const { idFilm } = useParams();
+    const { idFilme } = useParams();
     const [session, setSession] = useState([]);
     const [movie, setMovie] = useState([]);
 
     useEffect(()=>{
-        const url = `https://mock-api.driven.com.br/api/v8/cineflex/movies/${idFilm}/showtimes`;
+        const url = `https://mock-api.driven.com.br/api/v8/cineflex/movies/${idFilme}/showtimes`;
         axios.get(url)
         .then((res)=>{
             setMovie(res.data)
@@ -18,7 +18,7 @@ export default function SessionsPage() {
             console.log(res.data)
         })
         .catch((err)=>console.log(err))
-    }, [idFilm])
+    }, [idFilme])
 
     return (
         <PageContainer>
@@ -29,7 +29,7 @@ export default function SessionsPage() {
                         {movie.weekday} - {movie.date}
                         <ButtonsContainer>
                             {movie.showtimes.map((showtime)=>(
-                                <Link to={`/chairs/${showtime.id}`} key={showtime.id}>
+                                <Link to={`/assentos/${showtime.id}`} key={showtime.id}>
                                     <button data-test="showtime">{showtime.name}</button>
                                 </Link>
                                 ))}
